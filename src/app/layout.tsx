@@ -1,6 +1,6 @@
 import './globals.css'
 import { Metadata } from 'next'
-import ClientLayout from './client'
+
 import { APP_NAME } from '@/lib/consts'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
@@ -18,8 +18,8 @@ export const metadata = {
 const RootLayout: FC<PropsWithChildren<{}>> = ({ children }) => {
 	return (
 		<html lang="en" className={inter.variable}>
-			<body className="font-sans ">
-				<ClientLayout>{children}</ClientLayout>
+			<body className="font-sans bg-black">
+				{children}
 				<Toaster />
 			</body>
 		</html>

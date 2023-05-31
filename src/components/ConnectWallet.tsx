@@ -1,77 +1,79 @@
 'use client'
 
+import React, { useEffect, useState } from 'react'
 import { FC } from 'react'
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
-import { Bell } from './ui/icons'
+import { X } from './ui/icons'
 import { usePathname } from 'next/navigation'
 import { CollapsibleTrigger } from './ui/Collapsible'
-import { Avatar, ConnectKitButton, useSIWE } from 'connectkit'
 
-const ConnectWallet = () => <ConnectKitButton />
+const ConnectWallet = () => {
+	const [isModalOpen, setIsModalOpen] = useState(false);
 
-export const MobileProfileNav: FC<{ navigation: Array<{ name: string; href: string }> }> = ({ navigation }) => {
-	const pathname = usePathname()
-	const { signOut } = useSIWE()
+	useEffect(() => {
+		if (isModalOpen) {
+			document.body.style.overflow = 'hidden';
+		} else {
+			document.body.style.overflow = 'auto';
+		}
+	}, [isModalOpen]);
+
+	useEffect(() => {
+		const handleEsc = (e: KeyboardEvent) => {
+			if (e.key === 'Escape') {
+				setIsModalOpen(false);
+			}
+		}
+
+		window.addEventListener('keydown', handleEsc);
+
+		return () => {
+			window.removeEventListener('keydown', handleEsc);
+		}
+	}, []);
+
+	const handleModalOpen = () => {
+		setIsModalOpen(true);
+	}
+
+	const connectToMetaMask = () => {
+		console.log('connect to metamask');
+	}
+
+	const connectToBackpack = () => {
+		console.log('connect to backpack');
+	}
 
 	return (
 		<>
-			<div className="space-y-1 px-2 py-3 sm:px-3">
-				{navigation.map(item => (
-					<CollapsibleTrigger key={item.name} asChild>
-						<Link
-							href={item.href}
-							aria-current={pathname == item.href ? 'page' : undefined}
-							className={cn(
-								pathname == item.href
-									? 'bg-neutral-900 text-white'
-									: 'text-neutral-300 hover:bg-neutral-700 hover:text-white',
-								'block rounded-md px-3 py-2 text-base font-medium'
-							)}
-						>
-							{item.name}
-						</Link>
-					</CollapsibleTrigger>
-				))}
-			</div>
-			<ConnectKitButton.Custom>
-				{({ ensName, truncatedAddress, address }) => (
-					<div className="border-t border-neutral-700 pb-3 pt-4">
-						<div className="flex items-center px-5">
-							<div className="flex-shrink-0">
-								<Avatar address={address} name={ensName} size={40} radius={40} />
-							</div>
-							<div className="ml-3">
-								<div className="text-base font-medium leading-none text-white">
-									{ensName ?? truncatedAddress}
+			<button className="bg-white text-black rounded-md px-4 py-2 hover:scale-105 transition-all" onClick={handleModalOpen}>
+				Connect Wallet
+			</button>
+
+
+			{
+				isModalOpen && (
+					<div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+						<div className="bg-white rounded-md p-4 w-[30vw]">
+							<div className="flex items-center justify-between">
+								<div className='flex items-center flex-col'>
+									<h1 className="text-2xl">Connect Wallet</h1>
+									<p className='font-light text-sm'>Use providers given below to connect your wallet</p>
 								</div>
-								<div className="mt-1 text-xs font-medium leading-none text-neutral-400">
-									{ensName ? truncatedAddress : address}
-								</div>
+								<button className="text-black" onClick={() => setIsModalOpen(false)}><X /></button>
 							</div>
-							<button
-								type="button"
-								className="ml-auto flex-shrink-0 rounded-full bg-neutral-800 p-1 text-neutral-400 hover:text-white focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-neutral-800"
-							>
-								<span className="sr-only">View notifications</span>
-								<Bell className="h-6 w-6" aria-hidden="true" />
-							</button>
-						</div>
-						<div className="mt-3 space-y-1 px-2">
-							<CollapsibleTrigger asChild>
-								<button
-									onClick={signOut}
-									className="block rounded-md px-3 py-2 text-base font-medium text-neutral-400 hover:bg-neutral-700 hover:text-white"
-								>
-									Sign out
-								</button>
-							</CollapsibleTrigger>
+							<div className="flex flex-col gap-y-4 mt-8 items-center justify-between">
+								<button onClick={connectToMetaMask} className="bg-gray-700 w-44 text-white rounded-md px-4 py-2 hover:scale-105 transition-all">Metamask</button>
+								<button onClick={connectToBackpack} className="bg-gray-700 w-44 text-white rounded-md px-4 py-2 hover:scale-105 transition-all">Backpack</button>
+							</div>
 						</div>
 					</div>
-				)}
-			</ConnectKitButton.Custom>
+				)
+			}
 		</>
 	)
 }
+
+
 
 export default ConnectWallet

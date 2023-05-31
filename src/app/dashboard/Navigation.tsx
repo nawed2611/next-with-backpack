@@ -1,7 +1,6 @@
 'use client'
 
 import Link from 'next/link'
-import { cn } from '@/lib/utils'
 import { FC, PropsWithChildren } from 'react'
 import { usePathname } from 'next/navigation'
 
@@ -11,16 +10,10 @@ const Navigation: FC<PropsWithChildren<{ href: string }>> = ({ href, children })
 	return (
 		<Link
 			href={href}
-			className={cn(
-				href == pathname
-					? 'bg-neutral-900 text-white'
-					: 'text-neutral-300 hover:bg-neutral-700 hover:text-white',
-				'rounded-md px-3 py-2 text-sm font-medium'
-			)}
-			aria-current={href == pathname ? 'page' : undefined}
+			className={`rounded-md px-3 py-2 text-sm font-medium` + (href == pathname ? ' bg-neutral-200 text-neutral-900' : ' text-neutral-700 hover:bg-neutral-200 hover:text-neutral-900')}
 		>
 			{children}
-		</Link>
+		</Link >
 	)
 }
 

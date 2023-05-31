@@ -6,9 +6,8 @@ import Navigation from './Navigation'
 import { cookies } from 'next/headers'
 import { PropsWithChildren } from 'react'
 import { revalidatePath } from 'next/cache'
-import TeamSwitcher from '@/components/TeamSwitcher'
 import { Bell, X, List, Cube } from '@/components/ui/icons'
-import ConnectWallet, { MobileProfileNav } from '@/components/ConnectWallet'
+import ConnectWallet from '@/components/ConnectWallet'
 import Collapsible, { CollapsibleContent, CollapsibleTrigger } from '@/components/ui/Collapsible'
 
 const navigation = [
@@ -65,18 +64,6 @@ const DashboardLayout = async ({ children }: PropsWithChildren<{}>) => {
 						<div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
 							<div className="border-b border-neutral-700">
 								<div className="flex h-16 items-center justify-between px-4 sm:px-0">
-									<div className="flex items-center">
-										<Link href="/dashboard" className="flex-shrink-0">
-											<Cube className="h-8 w-8" color="white" weight="duotone" />
-										</Link>
-										<TeamSwitcher
-											className="ml-4"
-											onSwitch={switchTeam}
-											onCreate={createTeam}
-											currentTeamId={session.teamId!}
-											teams={user.teams.map(membership => membership.team)}
-										/>
-									</div>
 									<div className="hidden md:block">
 										<div className="ml-4 flex items-center md:ml-6">
 											<button
@@ -117,9 +104,6 @@ const DashboardLayout = async ({ children }: PropsWithChildren<{}>) => {
 								))}
 							</div>
 						</div>
-						<CollapsibleContent className="border-b border-neutral-700 md:hidden">
-							<MobileProfileNav navigation={navigation} />
-						</CollapsibleContent>
 					</nav>
 				</Collapsible>
 			</div>
